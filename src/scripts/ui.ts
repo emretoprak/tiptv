@@ -6,6 +6,153 @@
 import type { LiveChannel, Movie, Series, UserInfo, ScreenElements, ScreenName } from '../types';
 import { setCurrentFocus, restoreFocus } from './navigation/focusManager';
 
+// Console error tracking
+interface ConsoleError {
+	timestamp: Date;
+	message: string;
+	source?: string;
+	line?: number;
+	column?: number;
+	stack?: string;
+	type: 'error' | 'warn' | 'log';
+}
+
+let consoleErrors: ConsoleError[] = [];
+const MAX_CONSOLE_ERRORS = 50;
+
+/**
+ * Initialize console error tracking
+ */
+export function initConsoleErrorTracking(): void {
+	// Override console.error
+	const originalError = console.error;
+	console.error = function(...args: any[]) {
+		addConsoleError('error', args.join(' '));
+		originalError.apply(console, args);
+	};
+
+	// Override console.warn
+	const originalWarn = console.warn;
+	console.warn = function(...args: any[]) {
+		addConsoleError('warn', args.join(' '));
+		originalWarn.apply(console, args);
+	};
+
+	// Listen for unhandled errors
+	window.addEventListener('error', (event) => {
+		addConsoleError('error', event.message, event.filename, event.lineno, event.colno, event.error?.stack);
+	});
+
+	// Listen for unhandled promise rejections
+	window.addEventListener('unhandledrejection', (event) => {
+		addConsoleError('error', `Unhandled Promise Rejection: ${event.reason}`);
+	});
+}
+
+/**
+ * Add a console error to the tracking list
+ */
+function addConsoleError(
+	type: 'error' | 'warn' | 'log',
+	message: string,
+	source?: string,
+	line?: number,
+	column?: number,
+	stack?: string
+): void {
+	const error: ConsoleError = {
+		timestamp: new Date(),
+		message,
+		source,
+		line,
+		column,
+		stack,
+		type
+	};
+
+	consoleErrors.unshift(error);
+	
+	// Keep only the latest errors
+	if (consoleErrors.length > MAX_CONSOLE_ERRORS) {
+		consoleErrors = consoleErrors.slice(0, MAX_CONSOLE_ERRORS);
+	}
+
+	// Update the console errors display if it's visible
+	updateConsoleErrorsDisplay();
+}
+
+/**
+ * Update the console errors display in settings modal
+ */
+export function updateConsoleErrorsDisplay(): void {
+	const container = document.getElementById('console-errors-list');
+	if (!container) return;
+
+	if (consoleErrors.length === 0) {
+		container.innerHTML = `
+			<div class="text-gray-400 text-center py-2" data-i18n="settings.noErrors">
+				No errors detected
+			</div>
+		`;
+		return;
+	}
+
+	container.innerHTML = consoleErrors.map(error => {
+		const timeStr = error.timestamp.toLocaleTimeString('en-US', {
+			hour: '2-digit',
+			minute: '2-digit',
+			second: '2-digit'
+		});
+
+		const typeColor = error.type === 'error' ? 'text-red-400' : 
+						 error.type === 'warn' ? 'text-yellow-400' : 'text-blue-400';
+
+		const sourceInfo = error.source ? 
+			`<div class="text-gray-500 text-xs mt-1">
+				${error.source}${error.line ? `:${error.line}` : ''}${error.column ? `:${error.column}` : ''}
+			</div>` : '';
+
+		return `
+			<div class="border border-white/10 rounded p-2 bg-black/30">
+				<div class="flex justify-between items-start gap-2">
+					<span class="${typeColor} font-semibold text-xs uppercase">${error.type}</span>
+					<span class="text-gray-400 text-xs">${timeStr}</span>
+				</div>
+				<div class="text-white text-xs mt-1 break-words">${escapeHtml(error.message)}</div>
+				${sourceInfo}
+				${error.stack ? `<details class="mt-2">
+					<summary class="text-gray-400 text-xs cursor-pointer">Stack Trace</summary>
+					<pre class="text-gray-300 text-xs mt-1 whitespace-pre-wrap">${escapeHtml(error.stack)}</pre>
+				</details>` : ''}
+			</div>
+		`;
+	}).join('');
+}
+
+/**
+ * Clear all console errors
+ */
+export function clearConsoleErrors(): void {
+	consoleErrors = [];
+	updateConsoleErrorsDisplay();
+}
+
+/**
+ * Get current console errors
+ */
+export function getConsoleErrors(): ConsoleError[] {
+	return [...consoleErrors];
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(text: string): string {
+	const div = document.createElement('div');
+	div.textContent = text;
+	return div.innerHTML;
+}
+
 /**
  * Update main screen content counts
  * @param liveChannels - Array of live channels

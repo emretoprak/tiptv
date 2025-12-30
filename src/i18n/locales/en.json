@@ -46,7 +46,12 @@
     "cancel": "Cancel",
     "logout": "Logout",
     "close": "Close",
-    "privacyText": "Your IPTV credentials are stored locally in your browser only. No data is sent to our servers or shared with third parties. Your privacy is important to us."
+    "privacyText": "Your IPTV credentials are stored locally in your browser only. No data is sent to our servers or shared with third parties. Your privacy is important to us.",
+    "consoleErrors": "Console Errors",
+    "clearConsole": "Clear",
+    "refreshConsole": "Refresh",
+    "noErrors": "No errors detected",
+    "consoleInfo": "This shows JavaScript errors from the browser console. Useful for debugging issues on mobile devices."
   },
   "common": {
     "back": "Back",

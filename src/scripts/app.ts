@@ -35,7 +35,7 @@ import {
 import { getCache, setCache, deleteCache } from './cache';
 import { moveFocus, initializeNavigation } from './navigation';
 import { debounce } from './navigation/performance';
-import { showScreen, showModal, updateMainScreenCounts, updateLastUpdateTime } from './ui';
+import { showScreen, showModal, updateMainScreenCounts, updateLastUpdateTime, initConsoleErrorTracking, updateConsoleErrorsDisplay, clearConsoleErrors } from './ui';
 import { stopAllPlayers } from './player';
 import {
 	fetchUserInfo,
@@ -970,6 +970,7 @@ function setupEventHandlers(): void {
 	document.getElementById('settings-btn')?.addEventListener('click', async () => {
 		await renderProfiles();
 		updateLastUpdateTime();
+		updateConsoleErrorsDisplay();
 		
 		// Update active language button
 		const currentLang = await getStoredLanguage();
@@ -1135,6 +1136,15 @@ function setupEventHandlers(): void {
 		if (profileHostInput.value) {
 			profileHostInput.value = cleanHostUrl(profileHostInput.value);
 		}
+	});
+
+	// Console error handlers
+	document.getElementById('clear-console-btn')?.addEventListener('click', () => {
+		clearConsoleErrors();
+	});
+
+	document.getElementById('refresh-console-btn')?.addEventListener('click', () => {
+		updateConsoleErrorsDisplay();
 	});
 }
 
@@ -1342,6 +1352,9 @@ function setupSearchHandlers(): void {
  * Application initialization
  */
 (async () => {
+	// Initialize console error tracking first
+	initConsoleErrorTracking();
+	
 	// Initialize i18n
 	const lang = await getStoredLanguage();
 	await loadTranslations(lang);

@@ -46,7 +46,12 @@
     "cancel": "İptal",
     "logout": "Çıkış Yap",
     "close": "Kapat",
-    "privacyText": "IPTV bilgileriniz yalnızca tarayıcınızda yerel olarak saklanmaktadır. Hiçbir veri sunucularımıza gönderilmez veya üçüncü taraflarla paylaşılmaz. Gizliliğiniz bizim için önemlidir."
+    "privacyText": "IPTV bilgileriniz yalnızca tarayıcınızda yerel olarak saklanmaktadır. Hiçbir veri sunucularımıza gönderilmez veya üçüncü taraflarla paylaşılmaz. Gizliliğiniz bizim için önemlidir.",
+    "consoleErrors": "Konsol Hataları",
+    "clearConsole": "Temizle",
+    "refreshConsole": "Yenile",
+    "noErrors": "Hata tespit edilmedi",
+    "consoleInfo": "Bu bölüm tarayıcı konsolundaki JavaScript hatalarını gösterir. Mobil cihazlarda hata ayıklama için kullanışlıdır."
   },
   "common": {
     "back": "Geri",
