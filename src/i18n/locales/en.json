@@ -1,0 +1,103 @@
+{
+  "app": {
+    "title": "TIPTV",
+    "subtitle": "Enter your IPTV credentials",
+    "info": {
+      "privacy": "Your data is stored only on your device, never sent anywhere.",
+      "free": "Completely free and open source application.",
+      "https": "HTTP connections don't work in web version. Please request HTTPS address from your service provider.",
+      "legal": "Illegal IPTV usage is a crime. Please use legal content providers."
+    }
+  },
+  "login": {
+    "http": "HTTP",
+    "https": "HTTPS",
+    "host": "example.com:8080",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Login"
+  },
+  "downloads": {
+    "title": "Download App",
+    "subtitle": "Use on all platforms",
+    "android": "Android APK",
+    "windows": "Windows",
+    "macos": "macOS",
+    "linux": "Linux",
+    "coming_soon": "Coming Soon"
+  },
+  "main": {
+    "liveTV": "Live TV",
+    "movies": "Movies",
+    "series": "Series",
+    "channels": "channels",
+    "moviesCount": "movies",
+    "seriesCount": "series",
+    "watchHistory": "Watch History",
+    "favorites": "Favorites"
+  },
+  "settings": {
+    "title": "Settings",
+    "profiles": "IPTV Profiles",
+    "addProfile": "+ New Profile",
+    "profileName": "Profile Name (e.g: Main IPTV)",
+    "lastUpdate": "Last Update:",
+    "save": "Save",
+    "cancel": "Cancel",
+    "logout": "Logout",
+    "close": "Close",
+    "privacyText": "Your IPTV credentials are stored locally in your browser only. No data is sent to our servers or shared with third parties. Your privacy is important to us."
+  },
+  "common": {
+    "back": "Back",
+    "backToMain": "Main Menu",
+    "search": "Search...",
+    "loading": "Loading...",
+    "backToCategories": "Back to Categories"
+  },
+  "livetv": {
+    "search": "Search channels..."
+  },
+  "movies": {
+    "search": "Search movies..."
+  },
+  "series": {
+    "search": "Search series...",
+    "season": "Season",
+    "episode": "Episode",
+    "noTitle": "No title"
+  },
+  "header": {
+    "expiryDate": "Subscription Expiry",
+    "refresh": "Refresh",
+    "lastUpdate": "Last update:"
+  },
+  "history": {
+    "empty": "No watch history yet",
+    "clearAll": "Clear All",
+    "confirmClear": "Are you sure you want to clear all watch history?",
+    "liveTVTitle": "Live TV History",
+    "movieTitle": "Movie History",
+    "seriesTitle": "Series History"
+  },
+  "favorites": {
+    "empty": "No favorites yet",
+    "clearAll": "Clear All",
+    "confirmClear": "Are you sure you want to clear all favorites?",
+    "addRemove": "Add/Remove Favorites",
+    "liveTVTitle": "Live TV Favorites",
+    "movieTitle": "Movie Favorites",
+    "seriesTitle": "Series Favorites"
+  },
+  "player": {
+    "addToFavorites": "Add to Favorites",
+    "removeFromFavorites": "Remove from Favorites"
+  },
+  "profiles": {
+    "noProfiles": "No profiles added yet",
+    "notFound": "Profile not found!",
+    "deleteConfirm": "Are you sure you want to delete this profile?",
+    "hostRequired": "Host address cannot be empty!",
+    "allFieldsRequired": "Profile name, host, username and password are required!"
+  }
+}

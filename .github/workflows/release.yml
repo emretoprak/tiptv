@@ -1,0 +1,265 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      changelog: ${{ steps.generate-changelog.outputs.changelog }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for changelog
+      
+      - name: Get version from package.json
+        id: get-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Generate changelog
+        id: generate-changelog
+        run: |
+          # Get the latest tag (excluding current one if it exists)
+          LATEST_TAG=$(git tag --sort=-version:refname | grep -v "^v${{ steps.get-version.outputs.version }}$" | head -1)
+          
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No previous tag found, using all commits"
+            COMMITS=$(git log --pretty=format:"- %s (%h)" --no-merges --grep="^Merge" --invert-grep | head -20)
+            RANGE_INFO="All commits"
+          else
+            echo "Generating changelog from $LATEST_TAG to HEAD"
+            COMMITS=$(git log ${LATEST_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges --grep="^Merge" --invert-grep)
+            RANGE_INFO="Changes since $LATEST_TAG"
+          fi
+          
+          # Filter out empty lines and count commits
+          COMMITS=$(echo "$COMMITS" | grep -v "^$" || true)
+          COMMIT_COUNT=$(echo "$COMMITS" | wc -l | tr -d ' ')
+          
+          # Create changelog
+          if [ -z "$COMMITS" ] || [ "$COMMITS" = "" ] || [ "$COMMIT_COUNT" = "0" ]; then
+            CHANGELOG="## 🚀 TIPTV v${{ steps.get-version.outputs.version }}
+
+          ### 📋 Changes:
+          - Version bump to v${{ steps.get-version.outputs.version }}
+
+          ### 📱 Downloads:
+          - **Android APK**: \`TIPTV-v${{ steps.get-version.outputs.version }}-signed.apk\`
+          - **Windows**: Available in Assets below
+          - **macOS**: Available in Assets below  
+          - **Linux**: Available in Assets below
+
+          ### 🔧 Installation:
+          - **Android**: Download APK and install (enable unknown sources if needed)
+          - **Desktop**: Download appropriate file for your platform from Assets
+
+          ---
+          *This release was automatically generated*"
+          else
+            CHANGELOG="## 🚀 TIPTV v${{ steps.get-version.outputs.version }}
+
+          ### 📋 Changes ($COMMIT_COUNT commits):
+          $COMMITS
+
+          ### 📱 Downloads:
+          - **Android APK**: \`TIPTV-v${{ steps.get-version.outputs.version }}-signed.apk\`
+          - **Windows**: Available in Assets below
+          - **macOS**: Available in Assets below  
+          - **Linux**: Available in Assets below
+
+          ### 🔧 Installation:
+          - **Android**: Download APK and install (enable unknown sources if needed)
+          - **Desktop**: Download appropriate file for your platform from Assets
+
+          ---
+          *$RANGE_INFO - Generated automatically*"
+          fi
+          
+          # Save changelog to output (handle multiline)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  build-tauri:
+    needs: get-version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+            name: 'macOS-Apple-Silicon'
+          - platform: 'macos-latest'
+            args: '--target x86_64-apple-darwin'
+            name: 'macOS-Intel'
+          - platform: 'ubuntu-22.04'
+            args: '--target x86_64-unknown-linux-gnu'
+            name: 'Linux'
+          - platform: 'windows-latest'
+            args: '--target x86_64-pc-windows-msvc'
+            name: 'Windows'
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || matrix.platform == 'ubuntu-22.04' && 'x86_64-unknown-linux-gnu' || 'x86_64-pc-windows-msvc' }}
+
+      - name: Install dependencies (Ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build the app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: v${{ needs.get-version.outputs.version }}
+          releaseName: 'TIPTV v${{ needs.get-version.outputs.version }}'
+          releaseBody: ${{ needs.get-version.outputs.changelog }}
+          args: ${{ matrix.args }}
+
+  build-android:
+    needs: get-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        run: |
+          echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;27.1.12297006"
+          echo "ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/27.1.12297006" >> $GITHUB_ENV
+          echo "NDK_HOME=$ANDROID_HOME/ndk/27.1.12297006" >> $GITHUB_ENV
+
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version "^2.0" --locked
+
+      - name: Install Android targets
+        run: rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android x86_64-linux-android
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Generate icons
+        run: npm run generate:icons
+
+      - name: Create keystore from secrets
+        run: |
+          if [ -z "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ] || [ -z "${{ secrets.KEYSTORE_PASSWORD }}" ]; then
+            echo "❌ Missing required secrets!"
+            echo "Please set ANDROID_KEYSTORE_BASE64 and KEYSTORE_PASSWORD in repository secrets"
+            echo "Run 'npm run android:setup' locally to generate these values"
+            exit 1
+          fi
+          
+          mkdir -p keystore
+          # Clean base64 string and decode
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | tr -d '\n\r ' | base64 -d > keystore/tiptv-release-key.keystore
+          echo "✅ Keystore created from secrets"
+          ls -la keystore/
+
+      - name: Verify keystore
+        run: |
+          echo "Verifying keystore from secrets..."
+          keytool -list -keystore keystore/tiptv-release-key.keystore -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype JKS
+
+      - name: Initialize Android project
+        run: |
+          cargo tauri android init
+
+      - name: Build Android APK
+        run: |
+          cargo tauri android build
+        env:
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_NDK_ROOT }}
+          NDK_HOME: ${{ env.NDK_HOME }}
+
+      - name: Sign APK
+        run: |
+          APK_PATH=$(find src-tauri/gen/android/app/build/outputs/apk -name "*.apk" -type f | head -1)
+          if [ -n "$APK_PATH" ]; then
+            echo "Found APK: $APK_PATH"
+            
+            # Use modern apksigner instead of jarsigner
+            APKSIGNER=$(find $ANDROID_HOME/build-tools -name "apksigner" | head -1)
+            SIGNED_APK="TIPTV-v${{ needs.get-version.outputs.version }}-signed.apk"
+            
+            # Copy APK to workspace root
+            cp "$APK_PATH" "$SIGNED_APK"
+            
+            # Sign with apksigner
+            $APKSIGNER sign \
+              --ks keystore/tiptv-release-key.keystore \
+              --ks-key-alias tiptv \
+              --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+              --key-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+              "$SIGNED_APK"
+            
+            # Verify signature
+            $APKSIGNER verify --verbose "$SIGNED_APK"
+            
+            echo "SIGNED_APK_PATH=$PWD/$SIGNED_APK" >> $GITHUB_ENV
+            echo "✅ APK signed successfully: $SIGNED_APK"
+          else
+            echo "❌ No APK found to sign!"
+            find src-tauri/gen/android/app/build -name "*.apk" -type f || echo "No APK files found"
+            exit 1
+          fi
+
+      - name: Upload APK to Release
+        run: |
+          if [ -n "$SIGNED_APK_PATH" ] && [ -f "$SIGNED_APK_PATH" ]; then
+            echo "Uploading signed APK: $SIGNED_APK_PATH"
+            gh release upload v${{ needs.get-version.outputs.version }} "$SIGNED_APK_PATH" --clobber
+          else
+            echo "❌ No signed APK found!"
+            echo "Please ensure ANDROID_KEYSTORE_BASE64 and KEYSTORE_PASSWORD secrets are set."
+            echo "Run 'npm run android:setup' locally to generate these values."
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,36 @@
+---
+// Loading Screen Component
+---
+
+<div
+	id="loading-screen"
+	class="min-h-screen flex items-center justify-center p-4"
+>
+	<div class="text-center">
+		<div class="relative mb-6 md:mb-8">
+			<div
+				class="inline-flex size-20 md:size-24 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500 to-fuchsia-600 shadow-2xl animate-pulse"
+			>
+				<img
+					src="/logo-192.png"
+					alt="TIPTV"
+					class="w-12 h-12 md:w-16 md:h-16"
+				/>
+			</div>
+			<div class="absolute inset-0 flex items-center justify-center">
+				<div
+					class="size-28 md:size-32 rounded-full border-4 border-indigo-500/30 border-t-indigo-500 animate-spin"
+				>
+				</div>
+			</div>
+		</div>
+		<h1
+			class="text-3xl md:text-4xl font-bold mb-2 md:mb-3 bg-gradient-to-r from-indigo-400 to-fuchsia-500 bg-clip-text text-transparent"
+		>
+			TIPTV
+		</h1>
+		<p class="text-sm md:text-base text-gray-400 animate-pulse" data-i18n="common.loading">
+			Loading...
+		</p>
+	</div>
+</div>

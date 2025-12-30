@@ -1,0 +1,33 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "enables the default permissions",
+  "windows": [
+    "main"
+  ],
+  "webviews": [
+    "main"
+  ],
+  "platforms": [
+    "linux",
+    "macOS",
+    "windows",
+    "android",
+    "iOS"
+  ],
+  "permissions": [
+    "core:default",
+    "store:default",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-load",
+    "store:allow-save",
+    "store:allow-delete",
+    "store:allow-clear",
+    "store:allow-keys",
+    "store:allow-values",
+    "store:allow-entries",
+    "store:allow-length",
+    "store:allow-has"
+  ]
+}

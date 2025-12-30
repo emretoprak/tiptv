@@ -1,0 +1,363 @@
+@import "tailwindcss";
+@plugin "tailwind-scrollbar";
+
+@theme {
+    --color-dark: #0b0820;
+
+    --breakpoint-sm: 40em;
+    /* 640px */
+    --breakpoint-md: 48em;
+    /* 768px */
+    --breakpoint-lg: 64em;
+    /* 1024px */
+    --breakpoint-xl: 80em;
+    /* 1280px */
+    --breakpoint-2xl: 96em;
+    /* 1536px */
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 768px) {
+    :root {
+        font-size: 14px;
+    }
+}
+
+/* Landscape mode optimizations */
+@media (max-height: 500px) and (orientation: landscape) {
+    :root {
+        font-size: 12px;
+    }
+}
+
+:root,
+html,
+body {
+    height: 100%;
+}
+
+/* ────────────────────────────── */
+/* Smooth scrolling everywhere    */
+/* ────────────────────────────── */
+* {
+    scroll-behavior: smooth;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ────────────────────────────── */
+/* Custom scrollbar styling       */
+/* ────────────────────────────── */
+.custom-scroll {
+    scroll-behavior: smooth;
+}
+
+.custom-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg,
+            rgba(99, 102, 241, 0.6),
+            rgba(168, 85, 247, 0.6));
+    border-radius: 9999px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 9999px;
+}
+
+/* ────────────────────────────── */
+/* Video.js overrides             */
+/* ────────────────────────────── */
+.video-js {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+.video-js .vjs-big-play-button {
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg,
+            rgba(99, 102, 241, 0.9),
+            rgba(168, 85, 247, 0.9));
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+}
+
+.vjs-control-bar {
+    background: linear-gradient(180deg,
+            rgba(17, 17, 57, 0.8),
+            rgba(17, 17, 57, 0.6));
+    backdrop-filter: blur(8px);
+}
+
+.vjs-play-progress,
+.vjs-volume-level {
+    background: linear-gradient(90deg, #6366f1, #a855f7) !important;
+}
+
+.vjs-slider {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Ensure back button is always clickable */
+#player-back-btn,
+#livetv-back-btn {
+    position: relative;
+    z-index: 100 !important;
+    pointer-events: auto !important;
+}
+
+/* Prevent video player from blocking interactions when not in focus */
+.video-js:not(:hover):not(.vjs-playing):not(.vjs-user-active) {
+    pointer-events: none;
+}
+
+.video-js .vjs-control-bar,
+.video-js .vjs-big-play-button {
+    pointer-events: auto;
+}
+
+/* Ensure hidden screens don't block interactions */
+.hidden {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+/* Specifically ensure player screens don't block when hidden */
+#player-screen.hidden,
+#livetv-screen.hidden {
+    z-index: -1 !important;
+}
+
+/* Prevent video.js modals from blocking when not needed */
+.vjs-modal-dialog.vjs-hidden {
+    display: none !important;
+    pointer-events: none !important;
+}
+
+/* Channel list smooth scrolling */
+.channel-list {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ────────────────────────────── */
+/* Focus styles for TV remote     */
+/* ────────────────────────────── */
+.focusable {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.focusable:focus {
+    outline: none;
+    transform: scale(1.02);
+    background: rgba(99, 102, 241, 0.15) !important;
+    border-color: rgba(99, 102, 241, 0.6) !important;
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.5),
+        0 0 20px rgba(99, 102, 241, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 50;
+}
+
+/* Special focus for main screen category cards */
+.category-card:focus {
+    transform: scale(1.03);
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.6),
+        0 0 35px rgba(99, 102, 241, 0.6),
+        0 8px 24px rgba(0, 0, 0, 0.4);
+    background: rgba(99, 102, 241, 0.2) !important;
+}
+
+/* For sidebar category buttons */
+.sidebar-category-btn:focus {
+    transform: scale(1.01);
+    box-shadow:
+        0 0 0 2px rgba(99, 102, 241, 0.5),
+        0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+/* For content cards (movies, channels, series) */
+.content-card:focus {
+    transform: scale(1.02);
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.5),
+        0 0 20px rgba(99, 102, 241, 0.4),
+        0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* For episode cards */
+.episode-card:focus {
+    transform: scale(1.01);
+    box-shadow:
+        0 0 0 2px rgba(99, 102, 241, 0.5),
+        0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Special focus for inputs (no scale) */
+input.focusable:focus,
+input:focus {
+    transform: none !important;
+    box-shadow:
+        0 0 0 2px rgba(99, 102, 241, 0.4),
+        0 0 12px rgba(99, 102, 241, 0.3);
+}
+
+/* Minimal focus for delete buttons (border only) */
+button.focusable[class*="text-red"]:focus {
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    box-shadow: none !important;
+    z-index: auto !important;
+}
+
+/* Simple focus for watch history items */
+#watch-history-content .focusable:focus {
+    transform: none !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3) !important;
+    z-index: auto !important;
+}
+
+/* ────────────────────────────── */
+/* Mobile & Touch optimizations   */
+/* ────────────────────────────── */
+
+/* Prevent text selection on mobile */
+@media (max-width: 768px) {
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        user-select: none;
+    }
+
+    input,
+    textarea {
+        user-select: text;
+    }
+}
+
+/* Safe area padding for notched devices */
+@supports (padding: env(safe-area-inset-top)) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+    }
+}
+
+/* Landscape mode specific styles */
+@media (orientation: landscape) and (max-height: 600px) {
+
+    /* Reduce vertical spacing in landscape */
+    .landscape-compact {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    /* Make headers more compact in landscape */
+    header {
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Main screen specific landscape optimization */
+    #main-screen {
+        padding: 1rem !important;
+    }
+
+    #main-screen header {
+        margin-bottom: 1rem !important;
+    }
+
+    /* Category cards optimized for landscape */
+    .category-card {
+        padding: 1.5rem 1rem !important;
+        min-height: auto !important;
+    }
+
+    .category-card h2 {
+        font-size: 1.25rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+
+    .category-card p {
+        font-size: 0.875rem !important;
+    }
+
+    /* Icon size in landscape - bigger */
+    .category-card>div:first-child {
+        width: 3.5rem !important;
+        height: 3.5rem !important;
+    }
+
+    .category-card>div:first-child svg {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+}
+
+/* Touch-friendly button sizes */
+@media (max-width: 768px) {
+
+    button,
+    .focusable {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Hide scrollbars on mobile for cleaner look */
+@media (max-width: 768px) {
+    .custom-scroll::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* Ensure sidebars work properly on mobile */
+    .w-full.md\:w-80 {
+        max-height: 50vh;
+    }
+
+    .w-full.md\:w-80.flex.flex-col {
+        min-height: 0;
+    }
+}
+
+/* ────────────────────────────── */
+/* Language button styles         */
+/* ────────────────────────────── */
+.lang-btn.active,
+.login-lang-btn.active {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3)) !important;
+    border-color: rgba(99, 102, 241, 0.6) !important;
+}
+
+/* ────────────────────────────── */
+/* Select box arrow positioning   */
+/* ────────────────────────────── */
+select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem !important;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+
+.main-content>div {
+    height: 100%;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><!-- Cache Control -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>TIPTV</title>
+    <meta name="theme-color" content="#4f39f6">
+    <link rel="icon" href="https://topraktv-dc925.web.app/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://topraktv-dc925.web.app/favicon.ico" type="image/x-icon">
+    <script>
+        // Override Object.defineProperty to handle redefinition gracefully
+        const originalDefineProperty = Object.defineProperty;
+        Object.defineProperty = function(obj, prop, descriptor) {
+            try {
+                return originalDefineProperty.call(this, obj, prop, descriptor);
+            } catch (error) {
+                if (error.message.includes('Cannot redefine property')) {
+                    // Property already exists, try to update it if possible
+                    try {
+                        if (descriptor.value !== undefined) {
+                            obj[prop] = descriptor.value;
+                        }
+                        return obj;
+                    } catch (e) {
+                        // If we can't update it, just ignore silently
+                        console.warn(`Skipped redefining property: ${prop}`);
+                        return obj;
+                    }
+                } else {
+                    throw error;
+                }
+            }
+        };
+
+        // Remote HTML loader for device builds
+        async function loadRemoteHTML() {
+            try {
+                console.log('Loading remote HTML from https://topraktv-dc925.web.app');
+                
+                const response = await fetch('https://topraktv-dc925.web.app', {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit',
+                    headers: {
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                let htmlContent = await response.text();
+                
+                // Fix relative asset paths to point to remote domain
+                const remoteBaseUrl = 'https://topraktv-dc925.web.app';
+                
+                // Replace relative paths with absolute URLs
+                htmlContent = htmlContent
+                    // Fix CSS links
+                    .replace(/href="\/([^"]+\.css[^"]*)"/g, `href="${remoteBaseUrl}/$1"`)
+                    // Fix JS scripts
+                    .replace(/src="\/([^"]+\.js[^"]*)"/g, `src="${remoteBaseUrl}/$1"`)
+                    // Fix other assets like images, fonts, etc.
+                    .replace(/src="\/([^"]+\.(png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot)[^"]*)"/g, `src="${remoteBaseUrl}/$1"`)
+                    .replace(/href="\/([^"]+\.(png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|eot)[^"]*)"/g, `href="${remoteBaseUrl}/$1"`)
+                    // Fix favicon
+                    .replace(/href="\/favicon\.ico"/g, `href="${remoteBaseUrl}/favicon.ico"`);
+                
+                // Replace entire document with modified remote HTML
+                document.open();
+                document.write(htmlContent);
+                document.close();
+                
+                console.log('Remote HTML loaded successfully');
+                
+            } catch (error) {
+                console.error('Failed to load remote HTML:', error);
+                showErrorPage();
+            }
+        }
+        
+        function showErrorPage() {
+            // Fallback: Show error message
+            document.body.innerHTML = `
+                <div style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    background: #1a1a1a;
+                    color: #fff;
+                    text-align: center;
+                    padding: 20px;
+                ">
+                    <h1 style="color: #ff4444; margin-bottom: 20px;">Connection Error</h1>
+                    <p style="margin-bottom: 20px;">Unable to load remote content from:</p>
+                    <code style="background: #333; padding: 10px; border-radius: 5px; margin-bottom: 20px;">https://topraktv-dc925.web.app</code>
+                    <p style="color: #888;">Please check your internet connection and try again.</p>
+                    <button onclick="location.reload()" style="
+                        background: #4f39f6;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        margin-top: 20px;
+                        font-size: 16px;
+                    ">Retry</button>
+                </div>
+            `;
+        }
+        
+        // Load remote HTML when page loads
+        document.addEventListener('DOMContentLoaded', loadRemoteHTML);
+        
+        // Also try to load immediately in case DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadRemoteHTML);
+        } else {
+            loadRemoteHTML();
+        }
+    </script>
+</head>
+
+<body>
+</body>

@@ -1,0 +1,56 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "TIPTV",
+  "version": "1.0.3",
+  "identifier": "com.toprak.iptv",
+  "build": {
+    "frontendDist": "../dist",
+    "beforeDevCommand": "npm run build:device",
+    "beforeBuildCommand": "npm run build:device"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "TIPTV",
+        "width": 1280,
+        "height": 720,
+        "resizable": true,
+        "fullscreen": false,
+        "devtools": false
+      }
+    ],
+    "security": {
+      "csp": null,
+      "dangerousDisableAssetCspModification": true,
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$APPDATA/*", "$RESOURCE/*"]
+      }
+    },
+    "withGlobalTauri": true
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "iOS": {
+      "minimumSystemVersion": "13.0",
+      "developmentTeam": "4AL9CFQ9C7"
+    },
+    "macOS": {
+      "minimumSystemVersion": "10.13",
+      "exceptionDomain": "localhost"
+    },
+    "android": {
+      "minSdkVersion": 24,
+      "versionCode": 1001
+    }
+  },
+  "plugins": {}
+}

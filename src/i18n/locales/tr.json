@@ -1,0 +1,103 @@
+{
+  "app": {
+    "title": "TIPTV",
+    "subtitle": "IPTV bilgilerinizi girin",
+    "info": {
+      "privacy": "Verileriniz yalnızca cihazınızda saklanır, hiçbir yere gönderilmez.",
+      "free": "Tamamen ücretsiz ve açık kaynak bir uygulamadır.",
+      "https": "Web sürümünde HTTP bağlantı çalışmaz. Lütfen servis sağlayıcınızdan HTTPS adres isteyin veya Mobil, TV Desktop versiyonlarını kullanın",
+      "legal": "Yasadışı IPTV kullanımı suçtur. Lütfen yasal içerik sağlayıcıları kullanın."
+    }
+  },
+  "login": {
+    "http": "HTTP",
+    "https": "HTTPS",
+    "host": "example.com:8080",
+    "username": "Kullanıcı Adı",
+    "password": "Şifre",
+    "submit": "Giriş Yap"
+  },
+  "downloads": {
+    "title": "Uygulamayı İndir",
+    "subtitle": "Tüm platformlarda kullanın",
+    "android": "Android APK",
+    "windows": "Windows",
+    "macos": "macOS",
+    "linux": "Linux",
+    "coming_soon": "Yakında"
+  },
+  "main": {
+    "liveTV": "Canlı TV",
+    "movies": "Filmler",
+    "series": "Diziler",
+    "channels": "kanal",
+    "moviesCount": "film",
+    "seriesCount": "dizi",
+    "watchHistory": "İzleme Geçmişi",
+    "favorites": "Favoriler"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "profiles": "IPTV Profilleri",
+    "addProfile": "+ Yeni Profil",
+    "profileName": "Profil Adı (örn: Ana IPTV)",
+    "lastUpdate": "Son Güncelleme:",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "logout": "Çıkış Yap",
+    "close": "Kapat",
+    "privacyText": "IPTV bilgileriniz yalnızca tarayıcınızda yerel olarak saklanmaktadır. Hiçbir veri sunucularımıza gönderilmez veya üçüncü taraflarla paylaşılmaz. Gizliliğiniz bizim için önemlidir."
+  },
+  "common": {
+    "back": "Geri",
+    "backToMain": "Ana Menü",
+    "search": "Ara...",
+    "loading": "Yükleniyor...",
+    "backToCategories": "Kategorilere Dön"
+  },
+  "livetv": {
+    "search": "Kanal ara..."
+  },
+  "movies": {
+    "search": "Film ara..."
+  },
+  "series": {
+    "search": "Dizi ara...",
+    "season": "Sezon",
+    "episode": "Bölüm",
+    "noTitle": "Başlık yok"
+  },
+  "header": {
+    "expiryDate": "Abonelik Bitiş Tarihi",
+    "refresh": "Yenile",
+    "lastUpdate": "Son güncelleme:"
+  },
+  "history": {
+    "empty": "Henüz izleme geçmişi yok",
+    "clearAll": "Tümünü Temizle",
+    "confirmClear": "Tüm izleme geçmişini silmek istediğinizden emin misiniz?",
+    "liveTVTitle": "Canlı TV Geçmişi",
+    "movieTitle": "Film Geçmişi",
+    "seriesTitle": "Dizi Geçmişi"
+  },
+  "favorites": {
+    "empty": "Henüz favori yok",
+    "clearAll": "Tümünü Temizle",
+    "confirmClear": "Tüm favorileri silmek istediğinizden emin misiniz?",
+    "addRemove": "Favorilere Ekle/Çıkar",
+    "liveTVTitle": "Canlı TV Favorileri",
+    "movieTitle": "Film Favorileri",
+    "seriesTitle": "Dizi Favorileri"
+  },
+  "player": {
+    "addToFavorites": "Favorilere Ekle",
+    "removeFromFavorites": "Favorilerden Çıkar"
+  },
+  "profiles": {
+    "noProfiles": "Henüz profil eklenmemiş",
+    "notFound": "Profil bulunamadı!",
+    "deleteConfirm": "Bu profili silmek istediğinizden emin misiniz?",
+    "hostRequired": "Host adresi boş olamaz!",
+    "allFieldsRequired": "Profil adı, host, kullanıcı adı ve şifre zorunludur!"
+  }
+}

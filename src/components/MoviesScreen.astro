@@ -1,0 +1,26 @@
+---
+import Sidebar from "./Sidebar.astro";
+---
+
+<div
+	id="movies-screen"
+	class="hidden h-screen flex flex-col md:flex-row p-3 md:p-6 gap-3 md:gap-6 landscape-compact overflow-hidden"
+>
+	<Sidebar
+		backBtnId="movies-back-btn"
+		backBtnText="Main Menu"
+		backBtnTextKey="common.backToMain"
+		searchId="movies-search"
+		searchPlaceholder="Search movies..."
+		searchPlaceholderKey="movies.search"
+		categoriesId="movies-categories"
+	/>
+
+	<div class="flex-1 overflow-y-auto overflow-x-hidden custom-scroll min-h-0 p-1">
+		<div
+			id="movies-list"
+			class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4 grid-landscape"
+		>
+		</div>
+	</div>
+</div>

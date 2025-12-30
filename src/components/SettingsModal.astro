@@ -1,0 +1,184 @@
+---
+// Settings Modal Component
+---
+
+<div
+	id="settings-modal"
+	class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 md:p-4 z-50"
+>
+	<div
+		class="w-full max-w-2xl rounded-xl md:rounded-2xl border border-white/10 bg-[#0d0a29] p-4 md:p-6 max-h-[90vh] overflow-y-auto custom-scroll"
+	>
+		<h3 class="text-lg md:text-xl font-bold mb-3 md:mb-4" data-i18n="settings.title">Settings</h3>
+
+		<!-- Language Selector -->
+		<div
+			class="mb-4 md:mb-6 p-3 md:p-4 rounded-xl border border-white/10 bg-white/5"
+		>
+			<h4 class="text-sm md:text-base font-semibold mb-2 md:mb-3">
+				Language / Dil
+			</h4>
+			<div class="flex gap-2">
+				<button
+					id="lang-tr"
+					class="focusable flex-1 h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm font-semibold hover:bg-white/10 transition lang-btn active"
+					data-lang="tr"
+				>
+					🇹🇷 Türkçe
+				</button>
+				<button
+					id="lang-en"
+					class="focusable flex-1 h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm font-semibold hover:bg-white/10 transition lang-btn"
+					data-lang="en"
+				>
+					🇬🇧 English
+				</button>
+			</div>
+		</div>
+
+		<!-- IPTV Profiles -->
+		<div
+			class="mb-4 md:mb-6 p-3 md:p-4 rounded-xl border border-white/10 bg-white/5"
+		>
+			<div class="flex justify-between items-center mb-2 md:mb-3">
+				<h4 class="text-sm md:text-base font-semibold" data-i18n="settings.profiles">
+					IPTV Profiles
+				</h4>
+				<button
+					id="add-profile-btn"
+					class="focusable px-2 md:px-3 py-1 md:py-1.5 rounded-lg bg-gradient-to-br from-indigo-500 to-fuchsia-600 text-xs font-semibold text-white shadow-lg hover:brightness-110 transition"
+					data-i18n="settings.addProfile"
+				>
+					+ New Profile
+				</button>
+			</div>
+
+			<!-- Profile List -->
+			<div id="profiles-list" class="space-y-1 md:space-y-2 mb-3 md:mb-4">
+				<!-- Profiles will be dynamically added here -->
+			</div>
+
+			<!-- New/Edit Profile Form -->
+			<div id="profile-form-container" class="hidden">
+				<form
+					id="profile-form"
+					class="space-y-2 md:space-y-3 p-2 md:p-3 rounded-lg border border-white/10 bg-white/5"
+				>
+					<input type="hidden" id="profile-id" />
+					<input
+						id="profile-name"
+						type="text"
+						placeholder="Profile Name (e.g: Main IPTV)"
+						data-i18n-placeholder="settings.profileName"
+						class="focusable w-full h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 px-3 text-xs md:text-sm text-white placeholder:text-gray-400 outline-none focus:border-indigo-400/30 focus:ring-2 focus:ring-indigo-500/40"
+						required
+					/>
+					<div class="flex gap-2">
+						<select
+							id="profile-protocol"
+							class="focusable w-20 md:w-24 h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 pl-2 text-xs md:text-sm text-white outline-none focus:border-indigo-400/30 focus:ring-2 focus:ring-indigo-500/40"
+						>
+							<option value="http" data-i18n="login.http">HTTP</option>
+							<option value="https" data-i18n="login.https">HTTPS</option>
+						</select>
+						<input
+							id="profile-host"
+							type="text"
+							placeholder="example.com:8080"
+							data-i18n-placeholder="login.host"
+							class="focusable flex-1 h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 px-3 text-xs md:text-sm text-white placeholder:text-gray-400 outline-none focus:border-indigo-400/30 focus:ring-2 focus:ring-indigo-500/40"
+							required
+						/>
+					</div>
+					<input
+						id="profile-user"
+						type="text"
+						placeholder="Username"
+						data-i18n-placeholder="login.username"
+						class="focusable w-full h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 px-3 text-xs md:text-sm text-white placeholder:text-gray-400 outline-none focus:border-indigo-400/30 focus:ring-2 focus:ring-indigo-500/40"
+						required
+					/>
+					<input
+						id="profile-pass"
+						type="password"
+						placeholder="Password"
+						data-i18n-placeholder="login.password"
+						class="focusable w-full h-10 md:h-11 rounded-lg border border-white/10 bg-white/5 px-3 text-xs md:text-sm text-white placeholder:text-gray-400 outline-none focus:border-indigo-400/30 focus:ring-2 focus:ring-indigo-500/40"
+						required
+					/>
+					<div class="flex gap-2">
+						<button
+							type="submit"
+							data-i18n="settings.save"
+							class="focusable flex-1 h-10 md:h-11 rounded-lg bg-gradient-to-br from-indigo-500 to-fuchsia-600 font-semibold text-xs md:text-sm text-white shadow-lg hover:brightness-110 transition"
+						>
+							Save
+						</button>
+						<button
+							type="button"
+							id="cancel-profile-btn"
+							data-i18n="settings.cancel"
+							class="focusable px-3 md:px-4 h-10 md:h-11 rounded-lg bg-white/5 border border-white/10 font-semibold text-xs md:text-sm hover:bg-white/10 transition"
+						>
+							Cancel
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="space-y-2 md:space-y-3 mb-4 md:mb-6">
+			<div
+				class="flex justify-between items-center py-2 border-b border-white/10"
+			>
+				<span class="text-xs md:text-sm text-gray-400" data-i18n="settings.lastUpdate"
+					>Last Update:</span
+				>
+				<span id="settings-last-update" class="text-xs md:text-sm"
+					>--</span
+				>
+			</div>
+		</div>
+
+		<!-- About Section -->
+		<div
+			class="mb-4 md:mb-6 p-3 md:p-4 rounded-xl border border-white/10 bg-white/5"
+		>
+			<div class="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+				<div
+					class="flex size-8 md:size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-fuchsia-600 shadow-lg"
+				>
+					<img
+						src="/logo-192.png"
+						alt="TIPTV"
+						class="w-5 h-5 md:w-6 md:h-6"
+					/>
+				</div>
+				<div>
+					<h4 class="text-sm md:text-base font-bold">TIPTV</h4>
+					<p class="text-xs text-gray-400">IPTV Player</p>
+				</div>
+			</div>
+			<p class="text-xs md:text-sm text-gray-300 leading-relaxed" data-i18n="settings.privacyText">
+				Your IPTV credentials are stored locally in your browser only. No data is sent to our servers or shared with third parties. Your privacy is important to us.
+			</p>
+		</div>
+
+		<div class="flex gap-2 md:gap-3">
+			<button
+				id="logout-btn"
+				data-i18n="settings.logout"
+				class="focusable flex-1 h-11 md:h-12 rounded-xl bg-red-500/20 border border-red-500/50 text-red-400 text-sm md:text-base font-semibold hover:bg-red-500/30 transition"
+			>
+				Logout
+			</button>
+			<button
+				id="close-settings-btn"
+				data-i18n="settings.close"
+				class="focusable flex-1 h-11 md:h-12 rounded-xl bg-white/5 border border-white/10 text-sm md:text-base font-semibold hover:bg-white/10 transition"
+			>
+				Close
+			</button>
+		</div>
+	</div>
+</div>

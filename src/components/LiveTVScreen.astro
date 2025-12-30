@@ -1,0 +1,37 @@
+---
+import Sidebar from "./Sidebar.astro";
+---
+
+<div
+	id="livetv-screen"
+	class="hidden h-screen flex flex-col md:flex-row p-3 md:p-6 gap-3 md:gap-6 landscape-compact relative overflow-hidden"
+>
+	<Sidebar
+		backBtnId="livetv-back-btn"
+		backBtnText="Main Menu"
+		backBtnTextKey="common.backToMain"
+		searchId="livetv-search"
+		searchPlaceholder="Search channels..."
+		searchPlaceholderKey="livetv.search"
+		categoriesId="livetv-categories"
+	/>
+
+	<!-- Right Player -->
+	<div class="flex-1 flex flex-col min-h-0">
+		<div
+			class="flex-1 rounded-xl md:rounded-2xl border border-white/10 bg-black overflow-hidden min-h-[200px] md:min-h-0"
+		>
+			<video
+				id="livetv-player"
+				class="video-js vjs-default-skin vjs-big-play-centered w-full h-full"
+				controls
+				playsinline
+				preload="auto"></video>
+		</div>
+		<div
+			id="livetv-current"
+			class="mt-2 md:mt-4 text-center text-base md:text-xl font-semibold"
+		>
+		</div>
+	</div>
+</div>

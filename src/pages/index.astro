@@ -1,0 +1,52 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoadingScreen from "@/components/LoadingScreen.astro";
+import LoginScreen from "@/components/LoginScreen.astro";
+import MainScreen from "@/components/MainScreen.astro";
+import LiveTVScreen from "@/components/LiveTVScreen.astro";
+import MoviesScreen from "@/components/MoviesScreen.astro";
+import SeriesScreen from "@/components/SeriesScreen.astro";
+import EpisodesScreen from "@/components/EpisodesScreen.astro";
+import PlayerScreen from "@/components/PlayerScreen.astro";
+import SettingsModal from "@/components/SettingsModal.astro";
+import WatchHistoryModal from "@/components/WatchHistoryModal.astro";
+import FavoritesModal from "@/components/FavoritesModal.astro";
+---
+
+<Layout>
+	<body
+		class="min-h-screen bg-gradient-to-br from-[#0b0820] via-[#0d0a29] to-[#111139] text-gray-100 antialiased"
+	>
+		<LoadingScreen />
+		<LoginScreen />
+		<MainScreen />
+		<LiveTVScreen />
+		<MoviesScreen />
+		<SeriesScreen />
+		<EpisodesScreen />
+		<PlayerScreen />
+		<SettingsModal />
+		<WatchHistoryModal />
+		<FavoritesModal />
+
+		<style>
+			@keyframes spin {
+				from {
+					transform: rotate(0deg);
+				}
+				to {
+					transform: rotate(360deg);
+				}
+			}
+			.animate-spin {
+				animation: spin 1s linear infinite;
+			}
+		</style>
+
+		<script src="https://vjs.zencdn.net/8.23.3/video.min.js"></script>
+		<!-- Video.js HTTP Streaming (HLS/DASH support) - built into Video.js 8.x -->
+		<script>
+			import "../scripts/app.ts";
+		</script>
+	</body>
+</Layout>

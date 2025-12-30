@@ -1,0 +1,39 @@
+---
+interface Props {
+	backBtnId: string;
+	backBtnText: string;
+	backBtnTextKey?: string;
+	searchId: string;
+	searchPlaceholder: string;
+	searchPlaceholderKey?: string;
+	categoriesId: string;
+}
+
+const { backBtnId, backBtnText, backBtnTextKey, searchId, searchPlaceholder, searchPlaceholderKey, categoriesId } =
+	Astro.props;
+---
+
+<div class="w-full md:w-80 flex flex-col gap-3 md:gap-4 relative h-full md:max-h-screen md:h-screen">
+	<div class="flex gap-2 flex-shrink-0">
+		<button
+			id={backBtnId}
+			class="focusable flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition relative text-xl md:text-2xl"
+			style="z-index: 100;"
+			aria-label={backBtnText}
+		>
+			🏠
+		</button>
+		<input
+			id={searchId}
+			type="search"
+			placeholder={searchPlaceholder}
+			data-i18n-placeholder={searchPlaceholderKey}
+			class="focusable flex-1 h-10 md:h-12 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white placeholder:text-gray-400 outline-none focus:border-indigo-400/30 focus:ring-2 focus:ring-indigo-500/40"
+		/>
+	</div>
+	<div
+		id={categoriesId}
+		class="flex-1 overflow-y-auto overflow-x-hidden custom-scroll space-y-1 md:space-y-2 min-h-0 px-1"
+	>
+	</div>
+</div>

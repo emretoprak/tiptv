@@ -1,0 +1,155 @@
+---
+import Header from "./Header.astro";
+import CategoryCard from "./CategoryCard.astro";
+---
+
+<div
+	id="main-screen"
+	class="hidden h-screen flex flex-col p-4 md:p-6 overflow-hidden"
+>
+	<Header />
+
+	<!-- Main Content Grid -->
+	<div
+		class="main-content flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 content-center items-center auto-rows-fr"
+	>
+		<div class="flex flex-col gap-2" data-nav-col="0">
+			<CategoryCard
+				id="livetv-btn"
+				title="Live TV"
+				titleKey="main.liveTV"
+				countId="livetv-count"
+				countText="channels"
+				countTextKey="main.channels"
+				gradient="from-red-500 to-pink-600"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="48"
+					height="48"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					class="text-white"
+				>
+					<rect width="20" height="15" x="2" y="7" rx="2" ry="2"></rect>
+					<polyline points="17 2 12 7 7 2"></polyline>
+				</svg>
+			</CategoryCard>
+			<div class="flex gap-2">
+				<button
+					id="livetv-history-btn"
+					class="focusable flex-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs md:text-sm flex items-center justify-center gap-1.5"
+					data-i18n="main.watchHistory"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+					<span data-i18n="main.watchHistory">Watch History</span>
+				</button>
+				<button
+					id="livetv-favorites-btn"
+					class="focusable flex-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs md:text-sm flex items-center justify-center gap-1.5"
+					data-i18n="main.favorites"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+					<span data-i18n="main.favorites">Favorites</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-2" data-nav-col="1">
+			<CategoryCard
+				id="movies-btn"
+				title="Movies"
+				titleKey="main.movies"
+				countId="movies-count"
+				countText="movies"
+				countTextKey="main.moviesCount"
+				gradient="from-blue-500 to-cyan-600"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="48"
+					height="48"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					class="text-white"
+				>
+					<rect width="18" height="18" x="3" y="3" rx="2"></rect>
+					<path d="m16 10-4-2.5L8 10"></path>
+					<path d="M8 14v.01"></path>
+					<path d="M12 14v.01"></path>
+					<path d="M16 14v.01"></path>
+				</svg>
+			</CategoryCard>
+			<div class="flex gap-2">
+				<button
+					id="movies-history-btn"
+					class="focusable flex-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs md:text-sm flex items-center justify-center gap-1.5"
+					data-i18n="main.watchHistory"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+					<span data-i18n="main.watchHistory">Watch History</span>
+				</button>
+				<button
+					id="movies-favorites-btn"
+					class="focusable flex-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs md:text-sm flex items-center justify-center gap-1.5"
+					data-i18n="main.favorites"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+					<span data-i18n="main.favorites">Favorites</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-2" data-nav-col="2">
+			<CategoryCard
+				id="series-btn"
+				title="Series"
+				titleKey="main.series"
+				countId="series-count"
+				countText="series"
+				countTextKey="main.seriesCount"
+				gradient="from-purple-500 to-fuchsia-600"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="48"
+					height="48"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					class="text-white"
+				>
+					<path
+						d="M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"
+					></path>
+					<path d="M2 12a9 9 0 0 1 8 8"></path>
+					<path d="M2 16a5 5 0 0 1 4 4"></path>
+					<line x1="2" x2="2.01" y1="20" y2="20"></line>
+				</svg>
+			</CategoryCard>
+			<div class="flex gap-2">
+				<button
+					id="series-history-btn"
+					class="focusable flex-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs md:text-sm flex items-center justify-center gap-1.5"
+					data-i18n="main.watchHistory"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+					<span data-i18n="main.watchHistory">Watch History</span>
+				</button>
+				<button
+					id="series-favorites-btn"
+					class="focusable flex-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition text-xs md:text-sm flex items-center justify-center gap-1.5"
+					data-i18n="main.favorites"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+					<span data-i18n="main.favorites">Favorites</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
