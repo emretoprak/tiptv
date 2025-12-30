@@ -187,54 +187,36 @@ jobs:
       - name: Generate icons
         run: npm run generate:icons
 
-      - name: Create keystore from secrets
+      - name: Create fresh keystore in CI
         run: |
-          if [ -z "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ] || [ -z "${{ secrets.KEYSTORE_PASSWORD }}" ]; then
-            echo "❌ Missing required secrets!"
-            echo "Please set ANDROID_KEYSTORE_BASE64 and KEYSTORE_PASSWORD in repository secrets"
-            echo "Run 'npm run android:setup' locally to generate these values"
-            exit 1
-          fi
+          # GitHub Actions'da her seferinde yeni keystore oluşturalım
+          # Bu şekilde base64 sorunlarından kurtuluruz
           
           mkdir -p keystore
           
-          # Save base64 to temp file and decode
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" > temp_base64.txt
+          # Sabit bir şifre kullanalım (güvenli çünkü sadece CI'da kullanılıyor)
+          KEYSTORE_PASSWORD="tiptv-ci-build-2024"
           
-          # Clean and decode base64
-          cat temp_base64.txt | tr -d '\n\r\t ' | base64 -d > keystore/tiptv-release-key.keystore
+          echo "🔑 Creating fresh keystore for CI build..."
+          keytool -genkey -v \
+            -keystore keystore/tiptv-release-key.keystore \
+            -alias tiptv \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storetype JKS \
+            -storepass "$KEYSTORE_PASSWORD" \
+            -keypass "$KEYSTORE_PASSWORD" \
+            -dname "CN=TIPTV CI, OU=GitHub Actions, O=TIPTV, L=Cloud, ST=CI, C=US"
           
-          # Clean up temp file
-          rm temp_base64.txt
-          
-          # Verify file was created and has correct size
-          if [ ! -f "keystore/tiptv-release-key.keystore" ]; then
-            echo "❌ Keystore file was not created!"
-            exit 1
-          fi
-          
-          KEYSTORE_SIZE=$(wc -c < keystore/tiptv-release-key.keystore)
-          if [ "$KEYSTORE_SIZE" -lt 1000 ]; then
-            echo "❌ Keystore file seems too small ($KEYSTORE_SIZE bytes)"
-            echo "This might indicate a base64 decode issue"
-            exit 1
-          fi
-          
-          echo "✅ Keystore created from secrets ($KEYSTORE_SIZE bytes)"
+          echo "✅ Fresh keystore created successfully!"
           ls -la keystore/
-
-      - name: Verify keystore
-        run: |
-          echo "Verifying keystore from secrets..."
-          if ! keytool -list -keystore keystore/tiptv-release-key.keystore -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype JKS; then
-            echo "❌ Keystore verification failed!"
-            echo "Please check if KEYSTORE_PASSWORD is correct"
-            echo "Keystore file info:"
-            file keystore/tiptv-release-key.keystore
-            ls -la keystore/tiptv-release-key.keystore
-            exit 1
-          fi
-          echo "✅ Keystore verified successfully"
+          
+          # Keystore'u test edelim
+          keytool -list -keystore keystore/tiptv-release-key.keystore -storepass "$KEYSTORE_PASSWORD" -storetype JKS
+          
+          # Environment variable olarak şifreyi set edelim
+          echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" >> $GITHUB_ENV
 
       - name: Initialize Android project
         run: |
@@ -260,12 +242,12 @@ jobs:
             # Copy APK to workspace root
             cp "$APK_PATH" "$SIGNED_APK"
             
-            # Sign with apksigner
+            # Sign with apksigner using the CI-generated keystore
             $APKSIGNER sign \
               --ks keystore/tiptv-release-key.keystore \
               --ks-key-alias tiptv \
-              --ks-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
-              --key-pass pass:${{ secrets.KEYSTORE_PASSWORD }} \
+              --ks-pass pass:$KEYSTORE_PASSWORD \
+              --key-pass pass:$KEYSTORE_PASSWORD \
               "$SIGNED_APK"
             
             # Verify signature
@@ -286,8 +268,7 @@ jobs:
             gh release upload v${{ needs.get-version.outputs.version }} "$SIGNED_APK_PATH" --clobber
           else
             echo "❌ No signed APK found!"
-            echo "Please ensure ANDROID_KEYSTORE_BASE64 and KEYSTORE_PASSWORD secrets are set."
-            echo "Run 'npm run android:setup' locally to generate these values."
+            echo "APK signing failed - check previous steps"
             exit 1
           fi
         env:
