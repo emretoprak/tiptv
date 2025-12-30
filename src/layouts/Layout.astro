@@ -12,7 +12,7 @@ const buildTime = Date.now();
 		<meta charset="utf-8" />
 		<meta
 			name="viewport"
-			content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no"
+			content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no, maximum-scale=1, minimum-scale=1"
 		/>
 		<meta name="mobile-web-app-capable" content="yes" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -42,7 +42,7 @@ const buildTime = Date.now();
 		/>
 	</head>
 
-	<body class="h-full antialiased bg-[#0b0820] text-gray-100">
+	<body class="h-full antialiased bg-[#0b0820] text-gray-100" style="overflow: hidden; height: 100vh; height: 100dvh; max-height: 100vh; max-height: 100dvh;">
 		<slot />
 	</body>
 </html>

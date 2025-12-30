@@ -30,10 +30,45 @@
     }
 }
 
+/* Prevent scrolling in all orientations */
+html, body {
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    width: 100vw;
+    width: 100dvw; /* Dynamic viewport width for mobile */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
 :root,
 html,
 body {
     height: 100%;
+}
+
+/* ────────────────────────────── */
+/* Prevent scrolling globally     */
+/* ────────────────────────────── */
+* {
+    box-sizing: border-box;
+}
+
+/* Prevent any scrolling on the main containers */
+#main-screen,
+#livetv-screen,
+#movies-screen,
+#series-screen,
+#episodes-screen,
+#player-screen {
+    overflow: hidden !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
 }
 
 /* ────────────────────────────── */
@@ -261,6 +296,13 @@ button.focusable[class*="text-red"]:focus {
 /* Landscape mode specific styles */
 @media (orientation: landscape) and (max-height: 600px) {
 
+    /* Prevent any scrolling in landscape */
+    html, body {
+        overflow: hidden !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+    }
+
     /* Reduce vertical spacing in landscape */
     .landscape-compact {
         padding-top: 0.5rem !important;
@@ -270,41 +312,67 @@ button.focusable[class*="text-red"]:focus {
     /* Make headers more compact in landscape */
     header {
         margin-bottom: 0.5rem !important;
+        padding: 0.5rem !important;
     }
 
     /* Main screen specific landscape optimization */
     #main-screen {
-        padding: 1rem !important;
+        padding: 0.5rem !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
     }
 
     #main-screen header {
-        margin-bottom: 1rem !important;
+        margin-bottom: 0.5rem !important;
+        padding: 0.5rem !important;
+    }
+
+    /* Main content grid adjustments for landscape */
+    .main-content {
+        height: calc(100vh - 4rem) !important;
+        height: calc(100dvh - 4rem) !important;
+        overflow: hidden !important;
+        gap: 0.5rem !important;
     }
 
     /* Category cards optimized for landscape */
     .category-card {
-        padding: 1.5rem 1rem !important;
+        padding: 1rem 0.75rem !important;
         min-height: auto !important;
+        height: auto !important;
     }
 
     .category-card h2 {
-        font-size: 1.25rem !important;
+        font-size: 1.1rem !important;
         margin-bottom: 0.25rem !important;
     }
 
     .category-card p {
-        font-size: 0.875rem !important;
+        font-size: 0.8rem !important;
     }
 
-    /* Icon size in landscape - bigger */
+    /* Icon size in landscape - smaller for better fit */
     .category-card>div:first-child {
-        width: 3.5rem !important;
-        height: 3.5rem !important;
+        width: 2.5rem !important;
+        height: 2.5rem !important;
     }
 
     .category-card>div:first-child svg {
-        width: 2rem !important;
-        height: 2rem !important;
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }
+
+    /* Smaller buttons in landscape */
+    .category-card + div button {
+        padding: 0.25rem 0.5rem !important;
+        font-size: 0.75rem !important;
+        min-height: 2rem !important;
+    }
+
+    .category-card + div button svg {
+        width: 12px !important;
+        height: 12px !important;
     }
 }
 
