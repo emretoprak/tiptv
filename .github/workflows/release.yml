@@ -197,15 +197,44 @@ jobs:
           fi
           
           mkdir -p keystore
-          # Clean base64 string and decode
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | tr -d '\n\r ' | base64 -d > keystore/tiptv-release-key.keystore
-          echo "✅ Keystore created from secrets"
+          
+          # Save base64 to temp file and decode
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" > temp_base64.txt
+          
+          # Clean and decode base64
+          cat temp_base64.txt | tr -d '\n\r\t ' | base64 -d > keystore/tiptv-release-key.keystore
+          
+          # Clean up temp file
+          rm temp_base64.txt
+          
+          # Verify file was created and has correct size
+          if [ ! -f "keystore/tiptv-release-key.keystore" ]; then
+            echo "❌ Keystore file was not created!"
+            exit 1
+          fi
+          
+          KEYSTORE_SIZE=$(wc -c < keystore/tiptv-release-key.keystore)
+          if [ "$KEYSTORE_SIZE" -lt 1000 ]; then
+            echo "❌ Keystore file seems too small ($KEYSTORE_SIZE bytes)"
+            echo "This might indicate a base64 decode issue"
+            exit 1
+          fi
+          
+          echo "✅ Keystore created from secrets ($KEYSTORE_SIZE bytes)"
           ls -la keystore/
 
       - name: Verify keystore
         run: |
           echo "Verifying keystore from secrets..."
-          keytool -list -keystore keystore/tiptv-release-key.keystore -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype JKS
+          if ! keytool -list -keystore keystore/tiptv-release-key.keystore -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -storetype JKS; then
+            echo "❌ Keystore verification failed!"
+            echo "Please check if KEYSTORE_PASSWORD is correct"
+            echo "Keystore file info:"
+            file keystore/tiptv-release-key.keystore
+            ls -la keystore/tiptv-release-key.keystore
+            exit 1
+          fi
+          echo "✅ Keystore verified successfully"
 
       - name: Initialize Android project
         run: |
